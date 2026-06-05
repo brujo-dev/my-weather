@@ -85,7 +85,7 @@ def get_current_user():
     user_id = session.get("user_id")
     if user_id is None:
         return None
-    return User.query.get(user_id)
+    return db.session.get(User,user_id)
 
 
 @app.context_processor
@@ -100,7 +100,7 @@ def inject_current_user():
 @app.route("/dashboard")
 @login_required
 def dashboard():
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User,session["user_id"])
 
     city = "Rome,It"
     weather = format_weather(get_weather(city))
@@ -166,7 +166,7 @@ def search():
 @app.route("/delete_city/<int:city_id>", methods=["POST"])
 @login_required
 def delete_city(city_id):
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User,session["user_id"])
     city = City.query.filter_by(id=city_id, user_id=user.id).first()
 
     if not city:
@@ -192,7 +192,7 @@ def save_city():
     lat = request.form.get("lat", type=float)
     lon = request.form.get("lon", type=float)
 
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User,session["user_id"])
 
     MAX_CITIES = 6
 
@@ -295,7 +295,7 @@ def register():
 @app.route("/profile")
 @login_required
 def profile():
-    user = User.query.get(session["user_id"])
+    user = db.session.get(User,session["user_id"])
     cities_count = len(user.cities)
     searches_count = SearchHistory.query.filter_by(user_id=user.id).count()
     most_searched = (

@@ -10,7 +10,8 @@
       "Bash(open http://localhost:5000/search)",
       "Bash(python3 -c \"import secrets; print\\(secrets.token_hex\\(32\\)\\)\")",
       "Bash(pip3 show *)",
-      "Bash(pip3 install *)"
+      "Bash(pip3 install *)",
+      "Bash(python -m pytest tests/ -v)"
     ]
   }
 }
