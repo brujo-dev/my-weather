@@ -15,7 +15,7 @@ app.config.from_object(config_map.get(env, config_map["development"]))
 
 db.init_app(app)
 
-
+# ciaociao
 WEATHER_TYPE_RULES = [
     (("temporale",), "storm"),
     (("pioggia", "rovesci"), "rain"),
@@ -328,6 +328,17 @@ def roma():
 
 with app.app_context():
     db.create_all()
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template("404.html"), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    db.session.rollback()
+    return render_template("500.html"), 500
 
 
 if __name__ == "__main__":
