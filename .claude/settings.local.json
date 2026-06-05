@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python app.py)",
+      "Bash(curl -s http://localhost:5000)",
+      "Bash(curl -s http://localhost:5000/search)",
+      "Bash(tail -50 /tmp/app.log)",
+      "Read(//private/tmp/**)",
+      "Bash(pkill -f \"python app.py\")",
+      "Bash(open http://localhost:5000/search)",
+      "Bash(python3 -c \"import secrets; print\\(secrets.token_hex\\(32\\)\\)\")",
+      "Bash(pip3 show *)",
+      "Bash(pip3 install *)"
+    ]
+  }
+}

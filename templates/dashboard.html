@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}myWeather — Dashboard{% endblock %}
+
+{% block content %}
+    <div class="city-bg" style="background-image: url('{{ bg_image }}');"></div>
+    <div class="city-bg-overlay"></div>
+
+    <div class="weather-intro" data-type="{{ weather_type }}" id="weather-intro">
+        {% for p in particles %}
+            <span class="particle"
+                  style="--x: {{ p.left }}%; --y: {{ p.top }}%; --dur: {{ p.duration }}s; --delay: {{ p.delay }}s;">{{ p.emoji }}</span>
+        {% endfor %}
+    </div>
+
+    <div class="dashboard-wrapper">
+        <h2 class="dashboard-welcome">Ciao, {{ user.username }}!</h2>
+
+        <!-- Skeleton hero -->
+        <div class="skeleton-card skeleton-hero" id="skeleton-hero"></div>
+
+        <!-- Hero reale -->
+        <section class="hero glass" id="real-hero" style="display:none;">
+            <h1 class="hero-city">{{ weather.city }}</h1>
+            <p class="hero-temp">{{ weather.temperature }}°</p>
+            <p class="hero-description">{{ weather.description }}</p>
+            <p class="hero-humidity">Umidità · {{ weather.humidity }}%</p>
+        </section>
+
+        {% set ns = namespace(rain=false) %}
+        {% for entry in forecast %}
+            {% if 'pioggia' in entry.description %}
+                {% set ns.rain = true %}
+            {% endif %}
+        {% endfor %}
+
+        {% if ns.rain %}
+            <div class="alert glass alert-rain" id="alert-rain" style="display:none;">
+                ☔ Attenzione: pioggia prevista nelle prossime ore.
+            </div>
+        {% endif %}
+
+        <section class="forecast">
+            <h2 class="forecast-title">Prossime ore</h2>
+
+            <!-- Skeleton forecast -->
+            <div class="forecast-row" id="skeleton-forecast">
+                {% for entry in forecast %}
+                    <div class="skeleton-card skeleton-forecast-card"></div>
+                {% endfor %}
+            </div>
+
+            <!-- Forecast reale -->
+            <div class="forecast-row" id="real-forecast" style="display:none;">
+                {% for entry in forecast %}
+                    <div class="forecast-card glass">
+                        <p class="forecast-time">{{ entry.time }}</p>
+                        <p class="forecast-temp">{{ entry.temp }}°</p>
+                        <p class="forecast-description">{{ entry.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="saved-cities">
+            <h2 class="forecast-title">Città salvate</h2>
+
+            {% set MAX_CITIES = 6 %}
+            {% set saved = cities_weather[:MAX_CITIES] %}
+            {% set empty_slots = MAX_CITIES - saved | length %}
+
+            {% if saved %}
+                <!-- Skeleton città: sempre 6 slot (pieni + vuoti) -->
+                <div class="cities-grid" id="skeleton-grid">
+                    {% for i in range(MAX_CITIES) %}
+                        {% if i < saved | length %}
+                            <div class="skeleton-card"></div>
+                        {% else %}
+                            <div class="skeleton-card" style="opacity:0.18;"></div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Card città reali + slot vuoti -->
+                <div class="cities-grid" id="real-grid" style="display:none;">
+                    {% for item in saved %}
+                        <div class="city-card glass">
+                            <div class="city-card-header">
+                                <h3 class="city-card-name">{{ item.city_name }}</h3>
+                                {% if item.country %}
+                                    <span class="city-card-country">{{ item.country }}</span>
+                                {% endif %}
+                            </div>
+                            <p class="city-card-temp">{{ item.temp }}°</p>
+                            <p class="city-card-description">{{ item.description | capitalize }}</p>
+                            <p class="city-card-humidity">Umidità · {{ item.humidity }}%</p>
+                            <form method="POST" action="/delete_city/{{ item.city_id }}" class="delete-city-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-danger">Rimuovi</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                    {% for _ in range(empty_slots) %}
+                        <div class="city-slot-empty"><span>+</span></div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Skeleton vuoto (6 slot dimmed) -->
+                <div class="cities-grid" id="skeleton-grid">
+                    {% for _ in range(MAX_CITIES) %}
+                        <div class="skeleton-card" style="opacity:0.18;"></div>
+                    {% endfor %}
+                </div>
+
+                <!-- Empty state -->
+                <div id="real-grid" style="display:none;">
+                    <div class="empty-state">
+                        <span class="empty-icon">🌍</span>
+                        <h3>Nessuna città salvata</h3>
+                        <p>Cerca una città e salvala per vederla qui</p>
+                        <a href="/search" class="btn btn-primary">Cerca una città</a>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    </div>
+
+    <script>
+        (function () {
+            var intro = document.getElementById('weather-intro');
+            if (!intro) return;
+            setTimeout(function () { intro.classList.add('is-done'); }, 2500);
+            setTimeout(function () { intro.remove(); }, 3500);
+        })();
+
+        (function () {
+            var DELAY = 1500;
+
+            function show(el, displayValue) {
+                if (el) el.style.display = displayValue || 'block';
+            }
+            function hide(el) {
+                if (el) el.style.display = 'none';
+            }
+
+            setTimeout(function () {
+                /* Hero */
+                hide(document.getElementById('skeleton-hero'));
+                show(document.getElementById('real-hero'));
+
+                /* Alert pioggia */
+                show(document.getElementById('alert-rain'));
+
+                /* Forecast */
+                hide(document.getElementById('skeleton-forecast'));
+                show(document.getElementById('real-forecast'), 'grid');
+
+                /* Città salvate */
+                hide(document.getElementById('skeleton-grid'));
+                var realGrid = document.getElementById('real-grid');
+                if (realGrid) {
+                    realGrid.style.display = realGrid.classList.contains('cities-grid') ? 'grid' : 'block';
+                }
+            }, DELAY);
+        })();
+    </script>
+{% endblock %}

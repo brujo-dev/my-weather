@@ -1,0 +1,60 @@
+# =============================================
+# BYTECODE PYTHON
+# File compilati generati automaticamente
+# =============================================
+__pycache__/
+*.py[cod]
+*.pyo
+
+# =============================================
+# VIRTUAL ENVIRONMENT
+# Ambienti virtuali locali — mai committare
+# =============================================
+venv/
+.venv/
+env/
+.env.local/
+
+# =============================================
+# VARIABILI D'AMBIENTE
+# .env contiene segreti — .env.example si committa
+# =============================================
+.env
+
+# =============================================
+# FLASK — cartella instance
+# Contiene il database e configurazioni locali
+# =============================================
+instance/
+
+# =============================================
+# DATABASE
+# File SQLite generati a runtime
+# =============================================
+*.db
+*.sqlite3
+
+# =============================================
+# PYTEST E COVERAGE
+# Artefatti dei test locali
+# =============================================
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =============================================
+# EDITOR
+# Configurazioni e file temporanei degli IDE
+# =============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# =============================================
+# SISTEMA OPERATIVO
+# File nascosti generati da macOS e Windows
+# =============================================
+.DS_Store
+Thumbs.db

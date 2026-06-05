@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}myWeather — Profilo{% endblock %}
+
+{% block content %}
+    <div class="auth-wrapper">
+        <div class="profile-layout">
+
+            <section class="auth-card glass">
+                <h1 class="auth-title">{{ user.username }}</h1>
+
+                <dl class="profile-info">
+                    <div class="profile-row">
+                        <dt>Username</dt>
+                        <dd>{{ user.username }}</dd>
+                    </div>
+                    <div class="profile-row">
+                        <dt>Email</dt>
+                        <dd>{{ user.email }}</dd>
+                    </div>
+                    <div class="profile-row">
+                        <dt>Membro dal</dt>
+                        <dd>{{ user.created_at.strftime('%d/%m/%Y') }}</dd>
+                    </div>
+                </dl>
+
+                <a href="/logout" class="btn-primary btn-logout">Logout</a>
+            </section>
+
+            <section class="profile-stats">
+                <h2 class="forecast-title">Le tue statistiche</h2>
+                <div class="profile-stats-grid">
+                    <div class="profile-stat-card glass">
+                        <p class="profile-stat-value">{{ cities_count }}</p>
+                        <p class="profile-stat-label">Città salvate</p>
+                    </div>
+                    <div class="profile-stat-card glass">
+                        <p class="profile-stat-value">{{ searches_count }}</p>
+                        <p class="profile-stat-label">Ricerche totali</p>
+                    </div>
+                    <div class="profile-stat-card glass">
+                        <p class="profile-stat-value">{{ most_searched_city or '—' }}</p>
+                        <p class="profile-stat-label">Città più cercata</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+{% endblock %}

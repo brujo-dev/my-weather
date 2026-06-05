@@ -1,0 +1,130 @@
+:root {
+
+    /* =============================================
+       TIPOGRAFIA
+       Stack con fallback progressivi
+    ============================================= */
+    --font-family: 'Google Sans', 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+
+    /* =============================================
+       COLORI TESTO
+       Tre livelli di opacità per gerarchia visiva
+    ============================================= */
+    --color-text:       #ffffff;                    /* testo principale */
+    --color-text-muted: rgba(255, 255, 255, 0.78);  /* testo secondario, label form, sottotitoli */
+    --color-text-dim:   rgba(255, 255, 255, 0.60);  /* testo terziario, date, label uppercase */
+
+    /* =============================================
+       SFONDO BASE
+       Blu notte fisso, mai cambiare
+    ============================================= */
+    --color-bg: #0b1020;
+
+    /* =============================================
+       GLASS — primitiva fondamentale del design
+       Usare queste variabili su ogni card e overlay
+    ============================================= */
+    --glass-bg:        rgba(255, 255, 255, 0.12);   /* background card a riposo */
+    --glass-bg-strong: rgba(255, 255, 255, 0.18);   /* background card su hover */
+    --glass-border:    rgba(255, 255, 255, 0.25);   /* bordo sottile traslucido */
+    --glass-shadow:    0 8px 32px rgba(0, 0, 0, 0.25);
+    --glass-blur:      blur(22px) saturate(180%);   /* backdrop-filter standard card */
+    --glass-blur-nav:  blur(18px) saturate(180%);   /* backdrop-filter navbar */
+    --glass-blur-foot: blur(12px);                  /* backdrop-filter footer */
+
+    /* =============================================
+       BORDER RADIUS
+       Due taglie: large per card, medium per input e bottoni
+    ============================================= */
+    --radius-lg: 24px;
+    --radius-md: 16px;
+
+    /* =============================================
+       ACCENTI — gradienti bottoni
+       Ogni azione ha il suo colore semantico
+    ============================================= */
+    --gradient-primary: linear-gradient(135deg, rgba(140, 170, 255, 0.70), rgba(200, 120, 220, 0.70));  /* viola/blu — CTA principale */
+    --gradient-danger:  linear-gradient(135deg, rgba(255,  90, 110, 0.70), rgba(220,  60,  90, 0.70));  /* rosso     — rimozione */
+    --gradient-save:    linear-gradient(135deg, rgba(100, 200, 160, 0.70), rgba( 60, 160, 120, 0.70));  /* verde     — salvataggio */
+    --gradient-logout:  linear-gradient(135deg, rgba(255, 110, 130, 0.70), rgba(220,  80, 120, 0.70));  /* rosso/rosa — logout */
+    --gradient-user:    linear-gradient(135deg, rgba(140, 170, 255, 0.45), rgba(200, 120, 220, 0.45));  /* viola tenue — badge utente navbar */
+
+    /* Colori bordo abbinati ai gradienti */
+    --border-primary: rgba(255, 255, 255, 0.25);
+    --border-danger:  rgba(255, 130, 150, 0.40);
+    --border-save:    rgba(120, 220, 170, 0.40);
+
+    /* =============================================
+       ALERT / FLASH MESSAGES
+       Sfondo e bordo per ogni categoria semantica
+    ============================================= */
+    --alert-success-bg:     rgba(120, 220, 160, 0.18);
+    --alert-success-border: rgba(150, 230, 180, 0.45);
+
+    --alert-error-bg:       rgba(255,  90, 110, 0.18);
+    --alert-error-border:   rgba(255, 130, 150, 0.45);
+
+    --alert-warning-bg:     rgba(255, 190,  80, 0.18);
+    --alert-warning-border: rgba(255, 210, 120, 0.45);
+
+    --alert-info-bg:        rgba(100, 160, 255, 0.18);
+    --alert-info-border:    rgba(140, 190, 255, 0.45);
+
+    --alert-rain-bg:        rgba( 80, 140, 255, 0.18);
+    --alert-rain-border:    rgba(140, 180, 255, 0.40);
+
+    /* =============================================
+       SFONDI PAGINA
+       Gradienti radiali per pagine centrate e dashboard
+    ============================================= */
+
+    /* Sfondo pagine centrate (auth / search / history / profile) */
+    --bg-centered:
+        radial-gradient(circle at 25% 15%, rgba(110, 130, 230, 0.45), transparent 55%),
+        radial-gradient(circle at 80% 85%, rgba(220, 100, 180, 0.35), transparent 55%),
+        linear-gradient(160deg, #0b1020 0%, #1a1340 100%);
+
+    /* Overlay sopra l'immagine fotografica della dashboard */
+    --bg-dashboard-overlay:
+        radial-gradient(circle at 20%   0%, rgba( 80, 100, 200, 0.35), transparent 60%),
+        radial-gradient(circle at 80% 100%, rgba(200,  80, 160, 0.25), transparent 55%),
+        linear-gradient(180deg, rgba(10, 15, 35, 0.45) 0%, rgba(10, 15, 35, 0.75) 100%);
+
+    /* =============================================
+       LINK TESTO
+       Colore e bordo per link inline (auth footer, empty state)
+    ============================================= */
+    --link-color:        #cbd5ff;
+    --link-border-color: rgba(203, 213, 255, 0.35);
+
+    /* =============================================
+       TRANSIZIONI
+       Durate standard per micro-interazioni
+    ============================================= */
+    --transition-fast:   0.2s ease;   /* hover bottoni, input focus */
+    --transition-normal: 0.25s ease;  /* hover card (lift) */
+    --transition-slow:   1.0s ease;   /* fade-out weather intro */
+
+    /* =============================================
+       LAYOUT
+       Larghezze massime e spaziature principali
+    ============================================= */
+    --max-width-dashboard: 1100px;
+    --max-width-card:       500px;
+    --max-width-auth:       420px;
+
+    --spacing-page-v: 48px;   /* padding verticale pagine centrate */
+    --spacing-page-h: 24px;   /* padding orizzontale pagine */
+    --spacing-section: 32px;  /* gap tra sezioni dashboard */
+    --spacing-card:    24px;  /* gap tra card in colonna */
+
+    /* =============================================
+       Z-INDEX
+       Scala fissa per evitare conflitti di layer
+    ============================================= */
+    --z-bg:      -1;   /* city-bg, overlay sfondo */
+    --z-content:  1;   /* main, footer */
+    --z-flash:    2;   /* flash messages */
+    --z-navbar:  50;   /* navbar sticky */
+    --z-intro:  100;   /* weather intro animazione */
+}

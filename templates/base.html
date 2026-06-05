@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}myWeather{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/variables.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body data-weather="{{ weather_type | default('clear') }}">
+    <nav class="navbar">
+        <div class="navbar-brand">myWeather</div>
+        <ul class="navbar-links">
+            {% if current_user %}
+                <li><a href="/dashboard" class="{% if request.path == '/dashboard' %}active{% endif %}">Dashboard</a></li>
+            {% endif %}
+            <li><a href="/search" class="{% if request.path == '/search' %}active{% endif %}">Search</a></li>
+            <li><a href="/history" class="{% if request.path == '/history' %}active{% endif %}">History</a></li>
+            {% if current_user %}
+                <li>
+                    <a href="/profile" class="navbar-user {% if request.path == '/profile' %}active{% endif %}">
+                        👤 {{ current_user.username }}
+                    </a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="/login" class="{% if request.path == '/login' %}active{% endif %}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="toast-list" id="toast-list">
+                    {% for category, msg in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ msg }}</span>
+                            <button class="alert-close" aria-label="Chiudi">✕</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <span class="footer-brand">myWeather</span>
+            <ul class="footer-links">
+                <li><a href="/search">Search</a></li>
+                <li><a href="/history">History</a></li>
+                {% if current_user %}
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/profile">Profilo</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <p class="footer-copy">&copy; {{ current_year }} myWeather</p>
+    </footer>
+
+    <script>
+        (function () {
+            var navbar = document.querySelector('.navbar');
+            if (!navbar) return;
+            window.addEventListener('scroll', function () {
+                navbar.classList.toggle('scrolled', window.scrollY > 10);
+            }, { passive: true });
+        })();
+
+        (function () {
+            var AUTO_DISMISS = 4000;
+
+            function dismissToast(el) {
+                if (el.classList.contains('toast-hiding')) return;
+                el.classList.add('toast-hiding');
+                el.addEventListener('animationend', function () { el.remove(); }, { once: true });
+            }
+
+            document.querySelectorAll('.alert').forEach(function (toast, i) {
+                /* auto-dismiss scaglionato */
+                setTimeout(function () { dismissToast(toast); }, AUTO_DISMISS + i * 300);
+
+                /* chiusura manuale */
+                var btn = toast.querySelector('.alert-close');
+                if (btn) btn.addEventListener('click', function () { dismissToast(toast); });
+            });
+        })();
+    </script>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}myWeather — Storico Ricerche{% endblock %}
+
+{% block content %}
+    <div class="search-wrapper">
+        <div class="search-layout" style="max-width: 600px;">
+            <section class="search-card glass">
+                <h1 class="search-title">Storico Ricerche</h1>
+                <p class="history-total">{{ total_searches }} ricerche totali</p>
+
+                {% if searches %}
+                    <ul class="history-list">
+                        {% for search in searches %}
+                            <li class="history-item">
+                                <span class="history-city">{{ search.city_name }}</span>
+                                <span class="history-date">{{ search.searched_at.strftime('%d/%m/%Y alle %H:%M') }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="empty-state">
+                        <span class="empty-icon">🔍</span>
+                        <h3>Nessuno storico ricerche</h3>
+                        <p>Le tue ricerche appariranno qui</p>
+                    </div>
+                {% endif %}
+            </section>
+        </div>
+    </div>
+{% endblock %}

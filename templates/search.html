@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}myWeather — Cerca Meteo{% endblock %}
+
+{% block content %}
+    <div class="search-wrapper">
+        <div class="search-layout">
+            <!-- Search Card -->
+            <section class="search-card glass">
+                <h1 class="search-title">Cerca Meteo</h1>
+
+                <form method="POST" class="search-form">
+                    {{ form.hidden_tag() }}
+
+                    <div class="form-field">
+                        {{ form.city.label(class='form-label') }}
+                        {{ form.city(class='form-input', placeholder='Es. Roma, Tokyo, New York') }}
+
+                        {% if form.city.errors %}
+                            <ul class="form-errors">
+                                {% for error in form.city.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    {{ form.submit(class='btn-primary btn-search') }}
+                </form>
+            </section>
+
+            <!-- Results Card -->
+            {% if weather_data %}
+                <section class="results-card glass">
+                    <div class="result-city">
+                        <h2 class="result-city-name">{{ weather_data.city }}{% if weather_data.country %}, {{ weather_data.country }}{% endif %}</h2>
+                    </div>
+
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <p class="result-label">Temperatura</p>
+                            <p class="result-value">{{ weather_data.temperature }}°</p>
+                        </div>
+
+                        <div class="result-item">
+                            <p class="result-label">Umidità</p>
+                            <p class="result-value">{{ weather_data.humidity }}%</p>
+                        </div>
+                    </div>
+
+                    <div class="result-description">
+                        <p class="result-label">Condizioni</p>
+                        <p class="result-desc-text">{{ weather_data.description | capitalize }}</p>
+                    </div>
+
+                    {% if current_user %}
+                        <form method="POST" action="{{ url_for('save_city') }}" class="save-city-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="city_name" value="{{ weather_data.city }}">
+                            <input type="hidden" name="country" value="{{ weather_data.country }}">
+                            <input type="hidden" name="lat" value="{{ weather_data.lat }}">
+                            <input type="hidden" name="lon" value="{{ weather_data.lon }}">
+                            <button type="submit" class="btn-save-city">Salva città</button>
+                        </form>
+                    {% endif %}
+                </section>
+            {% elif searched_city %}
+                <section class="no-results-card glass">
+                    <p class="no-results-text">
+                        Città "<strong>{{ searched_city }}</strong>" non trovata.
+                    </p>
+                    <p class="no-results-hint">Prova con un'altra città.</p>
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

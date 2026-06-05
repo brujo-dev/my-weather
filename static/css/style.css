@@ -1,0 +1,1660 @@
+/* ==============================================
+   RESET
+   Box-sizing universale, margini e padding azzerati
+   sugli elementi che non ne hanno bisogno di default
+============================================== */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html, body, h1, h2, h3, h4, h5, h6,
+p, ul, ol, li, dl, dt, dd,
+figure, figcaption, blockquote {
+    margin: 0;
+    padding: 0;
+}
+
+/* ==============================================
+   BASE
+   Stili fondamentali del documento
+============================================== */
+
+html, body {
+    font-family: var(--font-family);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+    background: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1 0 auto;
+    position: relative;
+    z-index: var(--z-content);
+}
+
+/* ==============================================
+   TIPOGRAFIA
+   Gerarchia h1–h4 con dimensioni progressive
+============================================== */
+
+h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: var(--spacing-card);
+}
+
+h2 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    margin-bottom: var(--spacing-card);
+}
+
+h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+/* ==============================================
+   LINK
+   Stile coerente con il design system scuro
+============================================== */
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+a:hover {
+    text-decoration: underline;
+    color: var(--color-text);
+}
+
+/* ==============================================
+   CONTAINER
+   Larghezza massima centrata, padding laterale fisso
+============================================== */
+
+.container {
+    max-width: var(--max-width-dashboard);
+    margin: 0 auto;
+    padding: 0 var(--spacing-page-h);
+}
+
+/* ==============================================
+   UTILITY
+   Classi helper riutilizzabili ovunque
+============================================== */
+
+.text-center { text-align: center; }
+.text-muted  { color: var(--color-text-muted); }
+.text-dim    { color: var(--color-text-dim); }
+
+.mt-lg { margin-top: var(--spacing-section); }
+.mb-lg { margin-bottom: var(--spacing-section); }
+.mt-md { margin-top: var(--spacing-card); }
+.mb-md { margin-bottom: var(--spacing-card); }
+
+/* ==============================================
+   NAVBAR
+   Barra di navigazione sticky con effetto glass.
+   Aggiungere la classe .scrolled via JS allo scroll
+   per aumentare l'opacità del background.
+============================================== */
+
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-navbar);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    background: rgba(15, 20, 40, 0.55);
+    backdrop-filter: var(--glass-blur-nav);
+    -webkit-backdrop-filter: var(--glass-blur-nav);
+    border-bottom: 1px solid var(--glass-border);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+/* Stato attivo quando la pagina è scrollata */
+.navbar.scrolled {
+    background: rgba(15, 20, 40, 0.85);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Logo / brand */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.2px;
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.navbar-brand:hover {
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+/* Lista link di navigazione */
+.navbar-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+}
+
+/* Link normali con underline animato al hover */
+.navbar-links a {
+    position: relative;
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    overflow: hidden;
+}
+
+/* Underline animato — slide da sinistra */
+.navbar-links a::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    left: 14px;
+    width: 0;
+    height: 2px;
+    background: var(--glass-border);
+    border-radius: 2px;
+    transition: width var(--transition-fast);
+}
+
+.navbar-links a:hover {
+    background: var(--glass-bg);
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.navbar-links a:hover::after {
+    width: calc(100% - 28px);
+}
+
+/* Link attivo — pill con bordo */
+.navbar-links a.active {
+    background: var(--glass-bg-strong);
+    color: var(--color-text);
+    border: 1px solid var(--glass-border);
+    padding: 7px 13px;
+}
+
+/* Il link attivo non mostra l'underline (ha già il pill) */
+.navbar-links a.active::after { display: none; }
+
+/* Badge utente loggato */
+.navbar-links a.navbar-user {
+    background: var(--gradient-user);
+    color: var(--color-text);
+    border: 1px solid var(--glass-border);
+    padding: 7px 14px;
+    font-weight: 600;
+}
+
+.navbar-links a.navbar-user::after { display: none; }
+
+.navbar-links a.navbar-user:hover {
+    filter: brightness(1.1);
+    text-decoration: none;
+}
+
+/* ==============================================
+   SFONDO CITTÀ (Dashboard)
+   Immagine fotografica fissa + overlay radiale
+============================================== */
+
+.city-bg,
+.city-bg-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-bg);
+    pointer-events: none;
+}
+
+.city-bg {
+    background-size: cover;
+    background-position: center;
+    filter: saturate(110%);
+}
+
+.city-bg-overlay {
+    background: var(--bg-dashboard-overlay);
+}
+
+/* ==============================================
+   LAYOUT DASHBOARD
+   Wrapper principale con gap tra sezioni
+============================================== */
+
+.dashboard-wrapper {
+    max-width: var(--max-width-dashboard);
+    margin: 0 auto;
+    padding: var(--spacing-page-v) var(--spacing-page-h) 64px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-section);
+}
+
+/* ==============================================
+   GLASS — primitiva fondamentale
+   Applicare a qualsiasi card o contenitore visibile
+============================================== */
+
+.glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+}
+
+/* ==============================================
+   HERO (Dashboard)
+   Sezione meteo principale con temperatura grande
+============================================== */
+
+.hero {
+    padding: 48px 40px;
+    text-align: center;
+}
+
+.hero-city {
+    margin: 0 0 8px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.hero-temp {
+    margin: 0;
+    font-size: clamp(4.5rem, 12vw, 7rem);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -2px;
+}
+
+.hero-description {
+    margin: 12px 0 6px;
+    font-size: 1.25rem;
+    text-transform: capitalize;
+    color: var(--color-text-muted);
+}
+
+.hero-humidity {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.4px;
+}
+
+/* ==============================================
+   ALERT (dashboard — pioggia prevista)
+   Variante blue per avvisi meteo inline
+============================================== */
+
+.alert-rain {
+    padding: 16px 20px;
+    font-size: 1rem;
+    text-align: center;
+    background: var(--alert-rain-bg);
+    border-color: var(--alert-rain-border);
+}
+
+/* ==============================================
+   PREVISIONI ORARIE (Forecast)
+   Griglia card per le prossime ore
+============================================== */
+
+.forecast-title {
+    margin: 0 0 16px;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    letter-spacing: 0.3px;
+}
+
+.forecast-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.forecast-card {
+    padding: 24px 20px;
+    text-align: center;
+    transition: transform var(--transition-normal), background var(--transition-normal);
+}
+
+.forecast-card:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-strong);
+}
+
+.forecast-time {
+    margin: 0 0 6px;
+    font-size: 0.85rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.5px;
+}
+
+.forecast-temp {
+    margin: 0 0 8px;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+.forecast-description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    text-transform: capitalize;
+}
+
+/* ==============================================
+   CITTÀ SALVATE (Dashboard)
+   Griglia meteo live delle città preferite
+============================================== */
+
+.dashboard-welcome {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    letter-spacing: 0.3px;
+}
+
+.saved-cities {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Intestazione dashboard con saluto utente */
+.dashboard-header {
+    padding: 48px 0 var(--spacing-section);
+}
+
+.dashboard-header h1 {
+    margin-bottom: 0;
+}
+
+.dashboard-header .username {
+    color: var(--link-color);
+}
+
+/* Titolo di sezione con bordo inferiore evidenziato */
+.section-title {
+    display: inline-block;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-card);
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--glass-border);
+    letter-spacing: 0.3px;
+}
+
+/* Griglia città: mobile-first, si espande ai breakpoint superiori */
+.cities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: var(--spacing-card);
+}
+
+@media (min-width: 640px) {
+    .cities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .cities-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.city-card {
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: transform var(--transition-normal), background var(--transition-normal), box-shadow var(--transition-normal);
+    animation: fadeInUp 0.4s ease both;
+}
+
+.city-card:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-strong);
+}
+
+.city-card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.city-card-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.city-card-country {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.city-card-temp {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.city-card-description {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    text-transform: capitalize;
+}
+
+.city-card-humidity {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.3px;
+}
+
+.delete-city-form {
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+/* Intestazione card: nome città + codice paese affiancati */
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.card-header .city-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+.card-header .country-code {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+/* Emoji meteo centrata */
+.card-emoji {
+    display: block;
+    font-size: 2.5rem;
+    text-align: center;
+    margin: 8px 0;
+}
+
+/* Temperatura principale */
+.card-temp {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: var(--color-text);
+}
+
+/* Descrizione condizioni */
+.card-description {
+    color: var(--color-text-muted);
+    text-transform: capitalize;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: 4px;
+}
+
+/* Footer card: umidità e altri dati secondari */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--spacing-card);
+    padding-top: 12px;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+}
+
+/* ==============================================
+   EMPTY STATE
+   Placeholder centrato per sezioni senza contenuto
+============================================== */
+
+.empty-state {
+    text-align: center;
+    padding: 48px var(--spacing-page-h);
+    color: var(--color-text-muted);
+}
+
+.empty-state .empty-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: var(--spacing-card);
+    line-height: 1;
+}
+
+.empty-state h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-section);
+}
+
+/* Empty slot nella griglia città — placeholder visivo */
+.city-slot-empty {
+    border: 2px dashed var(--glass-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+.city-slot-empty span {
+    font-size: 1.5rem;
+    color: var(--color-text-dim);
+}
+
+/* ==============================================
+   BOTTONI
+   Ogni variante ha il suo colore semantico
+============================================== */
+
+/* Base condivisa — applicare sempre insieme a una variante cromatica */
+.btn,
+.btn-primary,
+.btn-danger,
+.btn-save-city,
+.btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 20px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+    color: var(--color-text);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast), filter var(--transition-fast);
+}
+
+/* Taglia piccola */
+.btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+/* Taglia grande */
+.btn-lg {
+    padding: 0.75rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* Larghezza piena */
+.btn-full {
+    width: 100%;
+    justify-content: center;
+}
+
+/* Azione principale — viola/blu */
+.btn-primary {
+    margin-top: 8px;
+    background: var(--gradient-primary);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 28px rgba(120, 140, 230, 0.35);
+}
+
+.btn-primary:active { transform: translateY(0); }
+
+/* Rimozione — rosso */
+.btn-danger {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    background: var(--gradient-danger);
+    border-color: var(--border-danger);
+}
+
+.btn-danger:hover {
+    filter: brightness(1.1);
+    box-shadow: 0 6px 20px rgba(220, 60, 90, 0.35);
+}
+
+.btn-danger:active { transform: translateY(1px); }
+
+/* Salvataggio città — verde */
+.btn-save-city {
+    padding: 12px 28px;
+    font-size: 0.95rem;
+    background: var(--gradient-save);
+    border-color: var(--border-save);
+}
+
+.btn-save-city:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+    box-shadow: 0 10px 28px rgba(80, 180, 130, 0.35);
+}
+
+.btn-save-city:active { transform: translateY(0); }
+
+/* Logout — rosso/rosa */
+.btn-logout {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    background: var(--gradient-logout);
+}
+
+.btn-logout:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+/* Successo / conferma — verde (alias semantico di btn-save-city) */
+.btn-success {
+    background: var(--gradient-save);
+    border-color: var(--border-save);
+}
+
+.btn-success:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+    box-shadow: 0 10px 28px rgba(80, 180, 130, 0.35);
+}
+
+.btn-success:active { transform: translateY(0); }
+
+/* Outline — bordo glass, sfondo trasparente */
+.btn-outline {
+    background: transparent;
+    border-color: var(--glass-border);
+    color: var(--color-text-muted);
+}
+
+.btn-outline:hover {
+    background: var(--glass-bg);
+    color: var(--color-text);
+    transform: translateY(-1px);
+    text-decoration: none;
+}
+
+.btn-outline:active { transform: translateY(0); }
+
+/* Modificatore ricerca — solo spaziatura extra */
+.btn-search { margin-top: 8px; }
+
+/* ==============================================
+   FORM
+   Input, label ed errori di validazione
+============================================== */
+
+/* Contenitore form centrato — equivalente glass del white-card del prompt */
+.form-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: var(--spacing-page-v) var(--spacing-page-h);
+}
+
+/* Titolo form centrato */
+.form-title {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-section);
+    color: var(--color-text);
+    letter-spacing: 0.3px;
+}
+
+/* Link sotto il form (es. "Hai già un account?") */
+.form-link {
+    text-align: center;
+    margin-top: var(--spacing-card);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.form-link a {
+    color: var(--link-color);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid var(--link-border-color);
+    transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.form-link a:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+    text-decoration: none;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label,
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    letter-spacing: 0.4px;
+}
+
+.form-field input,
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--color-text);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    outline: none;
+    transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-field input::placeholder,
+.form-input::placeholder {
+    color: var(--color-text-dim);
+}
+
+.form-field input:hover,
+.form-input:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.form-field input:focus,
+.form-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(180, 200, 255, 0.6);
+    box-shadow: 0 0 0 3px rgba(140, 170, 255, 0.18);
+}
+
+.form-error,
+.error-message {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    color: var(--alert-error-border);
+    letter-spacing: 0.3px;
+}
+
+.form-errors {
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8rem;
+    color: var(--alert-error-border);
+    letter-spacing: 0.3px;
+}
+
+.form-errors li { margin: 3px 0; }
+
+/* ==============================================
+   PAGINE CENTRATE (Auth / Search / History / Profile)
+   Wrapper con sfondo radiale e card centrata
+============================================== */
+
+.auth-wrapper,
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 160px);
+    padding: var(--spacing-page-v) var(--spacing-page-h);
+}
+
+.auth-wrapper::before,
+.search-wrapper::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-bg);
+    pointer-events: none;
+    background: var(--bg-centered);
+}
+
+/* Card contenitore */
+.auth-card {
+    width: 100%;
+    max-width: var(--max-width-auth);
+    padding: 40px 36px;
+}
+
+.auth-title {
+    margin: 0 0 28px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-align: center;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.auth-footer {
+    margin: 24px 0 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+}
+
+.auth-footer a {
+    color: var(--link-color);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid var(--link-border-color);
+}
+
+.auth-footer a:hover {
+    color: var(--color-text);
+    border-color: var(--color-text);
+    text-decoration: none;
+}
+
+/* ==============================================
+   PAGINA SEARCH
+   Layout con card risultati animata
+============================================== */
+
+.search-layout {
+    width: 100%;
+    max-width: var(--max-width-card);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-card);
+}
+
+.search-card { padding: 40px 36px; }
+
+.search-title {
+    margin: 0 0 28px;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-align: center;
+}
+
+.search-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* Card risultati — compare con animazione */
+.results-card {
+    padding: 32px 36px;
+    animation: slideUp 0.4s ease;
+}
+
+.result-city {
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.result-city-name {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-item { text-align: center; }
+
+.result-label {
+    margin: 0 0 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-text-dim);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.result-value {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+}
+
+.result-description { text-align: center; }
+
+.result-desc-text {
+    margin: 8px 0 0;
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+}
+
+/* Form salvataggio città */
+.save-city-form {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+/* Card nessun risultato */
+.no-results-card {
+    padding: 40px 36px;
+    text-align: center;
+    animation: slideUp 0.4s ease;
+}
+
+.no-results-text {
+    margin: 0 0 8px;
+    font-size: 1.1rem;
+}
+
+.no-results-text strong { color: rgba(255, 180, 120, 0.9); }
+
+.no-results-hint {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--color-text-dim);
+}
+
+/* ==============================================
+   PAGINA HISTORY
+   Lista ricerche con data e contatore
+============================================== */
+
+.history-total {
+    margin: -16px 0 24px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-dim);
+    letter-spacing: 0.3px;
+}
+
+.history-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.history-city {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.history-date {
+    font-size: 0.8rem;
+    color: var(--color-text-dim);
+    white-space: nowrap;
+}
+
+/* ==============================================
+   PAGINA PROFILE
+   Info utente + griglia statistiche
+============================================== */
+
+.profile-layout {
+    width: 100%;
+    max-width: var(--max-width-card);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-card);
+}
+
+.profile-info {
+    margin: 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-row:last-child { border-bottom: none; }
+
+.profile-row dt {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+}
+
+.profile-row dd {
+    font-size: 1.05rem;
+    text-align: right;
+    word-break: break-word;
+}
+
+.profile-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.profile-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.profile-stat-card {
+    padding: 24px 16px;
+    text-align: center;
+    transition: transform var(--transition-normal), background var(--transition-normal);
+}
+
+.profile-stat-card:hover {
+    transform: translateY(-4px);
+    background: var(--glass-bg-strong);
+}
+
+.profile-stat-value {
+    margin: 0 0 6px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    word-break: break-word;
+}
+
+.profile-stat-label {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ==============================================
+   FLASH MESSAGES
+   Messaggi di feedback con varianti semantiche
+============================================== */
+
+/* ==============================================
+   TOAST — flash messages in overlay bottom-right
+============================================== */
+
+.toast-list {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: var(--z-flash);
+    pointer-events: none;
+}
+
+.alert {
+    pointer-events: all;
+    min-width: 280px;
+    max-width: 380px;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid var(--glass-border);
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+    box-shadow: var(--glass-shadow);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: toastIn 0.35s ease both;
+}
+
+.alert.toast-hiding {
+    animation: toastOut 0.35s ease forwards;
+}
+
+.alert::before {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.alert-close {
+    margin-left: auto;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: var(--color-text-dim);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+    transition: color var(--transition-fast);
+}
+.alert-close:hover { color: var(--color-text); }
+
+.alert-success {
+    background: var(--alert-success-bg);
+    border-color: var(--alert-success-border);
+    border-left-color: var(--alert-success-border);
+}
+.alert-success::before { content: '✅'; }
+
+.alert-error {
+    background: var(--alert-error-bg);
+    border-color: var(--alert-error-border);
+    border-left-color: var(--alert-error-border);
+}
+.alert-error::before { content: '❌'; }
+
+.alert-warning {
+    background: var(--alert-warning-bg);
+    border-color: var(--alert-warning-border);
+    border-left-color: var(--alert-warning-border);
+}
+.alert-warning::before { content: '⚠️'; }
+
+.alert-info {
+    background: var(--alert-info-bg);
+    border-color: var(--alert-info-border);
+    border-left-color: var(--alert-info-border);
+}
+.alert-info::before { content: 'ℹ️'; }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(40px); }
+}
+
+@media (max-width: 639px) {
+    .toast-list {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+    }
+    .alert {
+        min-width: unset;
+        max-width: unset;
+        width: 100%;
+    }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ==============================================
+   FOOTER
+   Barra inferiore con blur e bordo glass
+============================================== */
+
+footer {
+    flex-shrink: 0;
+    padding: var(--spacing-section) var(--spacing-page-h);
+    color: var(--color-text-dim);
+    font-size: 0.85rem;
+    background: rgba(10, 15, 35, 0.6);
+    backdrop-filter: var(--glass-blur-foot);
+    -webkit-backdrop-filter: var(--glass-blur-foot);
+    border-top: 1px solid var(--glass-border);
+    position: relative;
+    z-index: var(--z-content);
+}
+
+.footer-content {
+    max-width: var(--max-width-dashboard);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer-brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: 0.3px;
+}
+
+.footer-links {
+    display: flex;
+    gap: var(--spacing-section);
+    list-style: none;
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: var(--color-text);
+}
+
+.footer-copy {
+    max-width: var(--max-width-dashboard);
+    margin: 16px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--glass-border);
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--color-text-dim);
+}
+
+@media (max-width: 639px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-links {
+        gap: var(--spacing-card);
+    }
+}
+
+/* ==============================================
+   ANIMAZIONI METEO — intro al caricamento
+   Particelle animate per ogni tipo di meteo
+============================================== */
+
+.weather-intro {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z-intro);
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity var(--transition-slow);
+}
+
+.weather-intro.is-done { opacity: 0; }
+
+.particle {
+    position: absolute;
+    font-size: 1.6rem;
+    will-change: transform, opacity;
+    user-select: none;
+}
+
+/* Pioggia e temporale: gocce cadono dall'alto */
+.weather-intro[data-type="rain"] .particle,
+.weather-intro[data-type="storm"] .particle {
+    left: var(--x);
+    top: -10vh;
+    font-size: 1.2rem;
+    animation: fall var(--dur) var(--delay) ease-in forwards;
+}
+
+/* Neve: fiocchi con oscillazione laterale */
+.weather-intro[data-type="snow"] .particle {
+    left: var(--x);
+    top: -10vh;
+    animation: fall-sway var(--dur) var(--delay) linear forwards;
+}
+
+/* Nuvoloso e nebbia: nuvole driftano orizzontalmente */
+.weather-intro[data-type="cloudy"] .particle,
+.weather-intro[data-type="cloudy_night"] .particle,
+.weather-intro[data-type="fog"] .particle {
+    top: var(--y);
+    left: -15vw;
+    font-size: 3rem;
+    animation: drift var(--dur) var(--delay) linear forwards;
+}
+
+/* Sereno: soli/lune pulsano e svaniscono */
+.weather-intro[data-type="clear"] .particle,
+.weather-intro[data-type="clear_night"] .particle {
+    left: var(--x);
+    top: var(--y);
+    font-size: 2rem;
+    opacity: 0;
+    animation: pulse 1.8s var(--delay) ease-out forwards;
+}
+
+/* Temporale: flash di luce bianca */
+.weather-intro[data-type="storm"]::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    opacity: 0;
+    animation: flicker 2.2s 0.3s steps(1, end) forwards;
+}
+
+@keyframes fall {
+    from { transform: translateY(0);      opacity: 0.9; }
+    to   { transform: translateY(120vh);  opacity: 0.6; }
+}
+
+@keyframes fall-sway {
+    0%   { transform: translate(0, 0);          opacity: 0.9; }
+    50%  { transform: translate(20px, 60vh); }
+    100% { transform: translate(-10px, 120vh);  opacity: 0.7; }
+}
+
+@keyframes drift {
+    from { transform: translateX(0);      opacity: 0.85; }
+    to   { transform: translateX(135vw);  opacity: 0.85; }
+}
+
+@keyframes pulse {
+    0%   { transform: scale(0.5); opacity: 0; }
+    50%  { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1);   opacity: 0; }
+}
+
+@keyframes flicker {
+    0%, 12%, 16%, 100% { opacity: 0;   }
+    13%, 14%           { opacity: 0.7; }
+    35%, 38%           { opacity: 0;   }
+    36%                { opacity: 0.5; }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+    from { background-position: 200% 0; }
+    to   { background-position: -200% 0; }
+}
+
+/* ==============================================
+   LOADING — spinner e overlay
+   Usare .loading-overlay per bloccare l'UI durante
+   operazioni asincrone, .spinner come indicatore
+============================================== */
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--glass-border);
+    border-top-color: var(--link-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 16, 32, 0.75);
+    backdrop-filter: var(--glass-blur-foot);
+    -webkit-backdrop-filter: var(--glass-blur-foot);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-intro);
+}
+
+/* ==============================================
+   SKELETON — placeholder animato durante il caricamento
+   Usare al posto delle card mentre i dati arrivano
+============================================== */
+
+.skeleton-card {
+    height: 180px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(
+        90deg,
+        var(--glass-bg) 25%,
+        var(--glass-bg-strong) 50%,
+        var(--glass-bg) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border: 1px solid var(--glass-border);
+}
+
+/* Skeleton hero — più alta, occupa la stessa proporzione della hero reale */
+.skeleton-hero {
+    height: 260px;
+}
+
+/* Skeleton forecast card — stessa altezza delle card orarie */
+.skeleton-forecast-card {
+    height: 120px;
+}
+
+/* ==============================================
+   CURSORE METEO-AWARE
+   Emoji cursore in base alle condizioni atmosferiche
+============================================== */
+
+body[data-weather="rain"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='24' text-anchor='middle'>☔</text></svg>") 16 16, auto;
+}
+body[data-weather="storm"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='22' text-anchor='middle'>⛈️</text></svg>") 16 16, auto;
+}
+body[data-weather="snow"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='24' text-anchor='middle'>❄️</text></svg>") 16 16, auto;
+}
+body[data-weather="cloudy"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='24' text-anchor='middle'>☁️</text></svg>") 16 16, auto;
+}
+body[data-weather="fog"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='22' text-anchor='middle'>🌫️</text></svg>") 16 16, auto;
+}
+body[data-weather="clear"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='24' text-anchor='middle'>☀️</text></svg>") 16 16, auto;
+}
+body[data-weather="clear_night"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='25' font-size='24' text-anchor='middle'>🌙</text></svg>") 16 16, auto;
+}
+body[data-weather="cloudy_night"] {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='16' y='26' font-size='22' text-anchor='middle'>☁️</text></svg>") 16 16, auto;
+}
+
+/* ==============================================
+   RESPONSIVE
+   Breakpoint unico a 640px
+============================================== */
+
+/* ==============================================
+   UTILITY RESPONSIVE
+   Visibilità condizionale per breakpoint
+============================================== */
+
+/* Nascosto su mobile, visibile da tablet in su */
+.hide-mobile { display: none; }
+
+@media (min-width: 640px) {
+    .hide-mobile { display: block; }
+}
+
+/* Visibile su mobile, nascosto da desktop in su */
+.hide-desktop { display: block; }
+
+@media (min-width: 1024px) {
+    .hide-desktop { display: none; }
+}
+
+/* ==============================================
+   RESPONSIVE — MOBILE (max 639px)
+   Adattamenti per schermi piccoli
+============================================== */
+
+@media (max-width: 639px) {
+    .container {
+        padding: 0 var(--spacing-page-h);
+    }
+
+    .navbar {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Menu nascosto su mobile — da mostrare con hamburger se necessario */
+    .navbar-links {
+        display: none;
+    }
+
+    .dashboard-wrapper {
+        padding: 24px 16px 40px;
+    }
+
+    .dashboard-header {
+        padding: var(--spacing-section) 0 var(--spacing-card);
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero { padding: 32px 20px; }
+
+    .auth-card { padding: 32px 24px; }
+
+    .form-container {
+        padding: var(--spacing-section) var(--spacing-page-h);
+        margin: 0 var(--spacing-page-h);
+    }
+
+    .search-card,
+    .results-card,
+    .no-results-card { padding: 32px 24px; }
+
+    .search-title     { font-size: 1.5rem; }
+    .result-city-name { font-size: 1.3rem; }
+    .result-grid      { grid-template-columns: 1fr; }
+
+    .cities-grid      { grid-template-columns: 1fr; }
+
+    .profile-stats-grid { grid-template-columns: 1fr; }
+
+    .history-list li {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE — TABLET (640px–1023px)
+   Adattamenti per schermi medi
+============================================== */
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    .cities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
