@@ -9,6 +9,7 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-fallback")
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI", "sqlite:///myweather.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True}
     OPENWEATHER_API_KEY = os.environ.get("OPENWEATHER_API_KEY", "")
 
 
@@ -18,6 +19,10 @@ class DevelopmentConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
+    SQLALCHEMY_DATABASE_URI = (
+        os.environ.get("DATABASE_URL", "").replace("postgres://", "postgresql://", 1)
+        or Config.SQLALCHEMY_DATABASE_URI
+    )
 
 
 class TestingConfig(Config):
